@@ -37,6 +37,8 @@ Then add the following dependency:
         <version>1.0.0</version>
     </dependency>
 
+***
+
 The integration process is simple, and involves importing EazySDK into your 
  virtual environment and configuring some settings. The most basic 
 configuration can be seen below.

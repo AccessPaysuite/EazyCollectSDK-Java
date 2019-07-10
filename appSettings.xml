@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Configuration for EazyCollectSDK-Java</comment>
+<entry key="payments.AutoFixPaymentDate">false</entry>
+<entry key="warnings.CustomerSearchWarning">false</entry>
+<entry key="payments.IsCreditAllowed">false</entry>
+<entry key="other.ForceUpdateSchedulesOnRun">false</entry>
+<entry key="contracts.AutoFixPaymentDayInMonth">false</entry>
+<entry key="currentEnvironment.Environment">sandbox</entry>
+<entry key="directDebitProcessingDays.InitialProcessingDays">10</entry>
+<entry key="sandboxClientDetails.ClientCode"/>
+<entry key="ecm3ClientDetails.ApiKey"/>
+<entry key="other.BankHolidayUpdateDays">30</entry>
+<entry key="sandboxClientDetails.ApiKey"/>
+<entry key="ecm3ClientDetails.ClientCode"/>
+<entry key="directDebitProcessingDays.OngoingProcessingDays">5</entry>
+<entry key="contracts.AutoFixAtTheEndAdHoc">false</entry>
+<entry key="contracts.AutoFixStartDate">false</entry>
+<entry key="contracts.AutoFixPaymentMonthInYear">false</entry>
+<entry key="contracts.AutoFixTerminationTypeAdHoc">false</entry>
+</properties>
