@@ -2,7 +2,9 @@ package uk.co.eazycollect.eazysdk;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import uk.co.eazycollect.eazysdk.exceptions.InvalidParameterException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -35,14 +37,20 @@ public class Get {
     }
 
     /**
-     * Get the current callback URL from EazyCustomerManager
-     * @return "The callback URL is example.com"
+     * Get the current callback URL for given entity from EazyCustomerManager
+     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment"
+     * @return "The callback URL is https://my.website.com/webhook"
      */
-    public String callbackUrl() {
+    public String callbackUrl(String entity) {
 
         try {
+
+            if (!Arrays.asList("contract", "customer", "payment").contains(entity.toLowerCase())) {
+                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer' or 'payment'.", entity));
+            }
+
             Session createRequest = handler.session(settings);
-            String sendRequest = createRequest.get("BACS/callback");
+            String sendRequest = createRequest.get(String.format("BACS/%s/callback", entity));
 
             // Null will be returned if a callback URL currently does not exist
             if(sendRequest.equals("{\"Message\":null)")) {

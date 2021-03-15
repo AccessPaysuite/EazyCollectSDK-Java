@@ -12,7 +12,10 @@ import uk.co.eazycollect.eazysdk.utilities.ContractPostChecks;
 import uk.co.eazycollect.eazysdk.utilities.CustomerPostChecks;
 import uk.co.eazycollect.eazysdk.utilities.PaymentPostChecks;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -42,16 +45,23 @@ public class Post {
      * Create a new call back URL for EazyCustomerManager
      * NOTE: We strongly recommend using a HTTPS secured URL as the return endpoint.
      *
-     * @return "The new callback URL is https://test.com"
+     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment"
+     * @param callbackUrl The new URL to set
+     * @return "The new callback URL is https://my.website.com/webhook"
      */
-    public String callbackUrl(String callbackUrl) {
+    public String callbackUrl(String entity, String callbackUrl) {
 
         try {
+
+            if (!Arrays.asList("contract", "customer", "payment").contains(entity.toLowerCase())) {
+                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer' or 'payment'.", entity));
+            }
+
             // Create a new dictionary of parameters
             parameters = new HashMap<>();
             parameters.put("url", callbackUrl);
             Session createRequest = handler.session(settings);
-            String sendRequest = createRequest.post("BACS/callback", parameters);
+            String sendRequest = createRequest.post(String.format("BACS/%s/callback", entity), parameters);
             // Pass the return string to the handler. This will throw an exception if it is not what we expect
             handler.genericExceptionCheck(sendRequest);
             return String.format("The new callback URL is %s", callbackUrl);

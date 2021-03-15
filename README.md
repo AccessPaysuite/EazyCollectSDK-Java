@@ -54,7 +54,7 @@ configuration can be seen below.
     settings.setProperty("sandboxClientDetails.ClientCode", "{Client_Code}");
        
     Get get = new Get(settings);
-    String response = new Get.customers.query();
+    String response = get.customers().query();
     System.out.println(response);
        
 ## Documentation

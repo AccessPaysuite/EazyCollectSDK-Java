@@ -5,6 +5,7 @@ import uk.co.eazycollect.eazysdk.exceptions.InvalidEnvironmentException;
 import uk.co.eazycollect.eazysdk.exceptions.InvalidParameterException;
 import uk.co.eazycollect.eazysdk.exceptions.ResourceNotFoundException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -27,13 +28,19 @@ public class Delete {
 
     /**
      * Delete the currently selected callback URL for EazyCustomerManager
+     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment"
      * @return Confirmation string
      */
-    public String callbackUrl() {
+    public String callbackUrl(String entity) {
 
         try {
+
+            if (!Arrays.asList("contract", "customer", "payment").contains(entity.toLowerCase())) {
+                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer' or 'payment'.", entity));
+            }
+
             Session createRequest = handler.session(settings);
-            String sendRequest = createRequest.delete("BACS/callback");
+            String sendRequest = createRequest.delete(String.format("BACS/%s/callback", entity));
             // Pass the return string to the handler. This will throw an exception if it is not what we expect.
             handler.genericExceptionCheck(sendRequest);
 

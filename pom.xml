@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.co.eazycollect.eazysdk</groupId>
     <artifactId>eazysdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
     <name>EazyCollectSDK</name>
     <description>A Java SDK client for EazyCustomerManager</description>
