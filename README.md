@@ -14,27 +14,12 @@ Welcome to the **EazySDK** repository.  EazySDK is an integration of the
 A `.jar` file for the SDK can easily be created from this repository's files by using your preferred Java IDE.
 
 ### Maven
-Add the following repository to your Maven project:
-
-    <repositories>
-        <repository>
-            <id>mvn-repo</id>
-            <url>https://rawgit.com/EazyCollectServices/eazysdk-maven/master</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-Then add the following dependency:
+Add the following dependency to your Maven project:
 
     <dependency>
         <groupId>uk.co.eazycollect.eazysdk</groupId>
         <artifactId>eazysdk</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </dependency>
 
 ***
