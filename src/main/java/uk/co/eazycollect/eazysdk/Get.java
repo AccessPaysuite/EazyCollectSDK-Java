@@ -38,15 +38,15 @@ public class Get {
 
     /**
      * Get the current callback URL for given entity from EazyCustomerManager
-     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment"
+     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment", "schedule"
      * @return "The callback URL is https://my.website.com/webhook"
      */
     public String callbackUrl(String entity) {
 
         try {
 
-            if (!Arrays.asList("contract", "customer", "payment").contains(entity.toLowerCase())) {
-                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer' or 'payment'.", entity));
+            if (!Arrays.asList("contract", "customer", "payment", "schedule").contains(entity.toLowerCase())) {
+                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer', 'payment' or 'schedule'.", entity));
             }
 
             Session createRequest = handler.session(settings);

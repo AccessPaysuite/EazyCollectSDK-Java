@@ -45,7 +45,7 @@ public class Post {
      * Create a new call back URL for EazyCustomerManager
      * NOTE: We strongly recommend using a HTTPS secured URL as the return endpoint.
      *
-     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment"
+     * @param entity The entity for which to receive BACS messages. Valid choices: "contract", "customer", "payment", "schedule"
      * @param callbackUrl The new URL to set
      * @return "The new callback URL is https://my.website.com/webhook"
      */
@@ -53,8 +53,8 @@ public class Post {
 
         try {
 
-            if (!Arrays.asList("contract", "customer", "payment").contains(entity.toLowerCase())) {
-                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer' or 'payment'.", entity));
+            if (!Arrays.asList("contract", "customer", "payment", "schedule").contains(entity.toLowerCase())) {
+                throw new InvalidParameterException(String.format("%s is not a valid entity; must be one of either 'contract', 'customer',  'payment' or 'schedule'.", entity));
             }
 
             // Create a new dictionary of parameters
@@ -264,6 +264,7 @@ public class Post {
         private ContractPostChecks contractChecks;
         private String customer;
         private String scheduleName;
+        private String scheduleId;
         private String startDate;
         private boolean giftAid;
         private String terminationType;
@@ -294,6 +295,11 @@ public class Post {
 
         public contract scheduleName(String scheduleName) {
             this.scheduleName = scheduleName;
+            return this;
+        }
+
+        public contract scheduleId(String scheduleId) {
+            this.scheduleId = scheduleId;
             return this;
         }
 
@@ -381,13 +387,21 @@ public class Post {
 
             try {
 
-                if(customer.equals("") || scheduleName.equals("") || startDate.equals("") || terminationType.equals("") || atTheEnd.equals("")) {
+                if ((scheduleName.equals("") && scheduleId.equals("")) || (!TextUtils.isEmpty(scheduleName) && !TextUtils.isEmpty(scheduleId))) {
+                    throw new EmptyRequiredParameterException("You must include either scheduleName or scheduleId, not both.");
+                }
+
+                if (customer.equals("") || startDate.equals("") || terminationType.equals("") || atTheEnd.equals("")) {
                     throw new EmptyRequiredParameterException("One or more required parameters are empty. Please double check all required parameters are filled and re-submit.");
                 }
 
                 contractChecks = new ContractPostChecks();
+
                 // Perform several basic checks to ensure the information provided for the customer is fit for use.
-                contractChecks.checkScheduleNameIsAvailable(scheduleName, settings);
+                if (!TextUtils.isEmpty(scheduleName)) {
+                    contractChecks.checkScheduleNameIsAvailable(scheduleName, settings);
+                }
+
                 int terminationTypeInt = contractChecks.checkTerminationTypeIsValid(terminationType);
                 int atTheEndInt = contractChecks.checkAtTheEndIsValid(atTheEnd);
                 String startDateDateString = contractChecks.checkStartDateIsValid(startDate, settings);
@@ -541,12 +555,13 @@ public class Post {
                 }
 
                 // Add method arguments to the parameters only if they are not empty
-                parameters.put("scheduleName", scheduleName);
                 parameters.put("start", startDateDateString);
                 parameters.put("isGiftAid", String.valueOf(giftAid));
                 parameters.put("terminationType", terminationType);
                 parameters.put("atTheEnd", atTheEnd);
 
+                if (!TextUtils.isEmpty(scheduleName)) parameters.put("scheduleName", scheduleName);
+                if (!TextUtils.isEmpty(scheduleId)) parameters.put("scheduleId", scheduleId);
                 if(!TextUtils.isEmpty(numberOfDebits)) parameters.put("numberOfDebits", numberOfDebits);
                 if(!TextUtils.isEmpty(frequency)) parameters.put("every", frequency);
                 if(!TextUtils.isEmpty(initialAmount)) parameters.put("initialAmount", initialAmount);
